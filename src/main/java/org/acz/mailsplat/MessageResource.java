@@ -30,7 +30,7 @@ import com.google.inject.Inject;
 
 import static org.acz.mailsplat.MessageRepresentation.from;
 
-@Path("/message/{id: \\w+}")
+@Path("/message/{id: [\\p{XDigit}-]+}")
 public class MessageResource
 {
     private final MessageStore store;

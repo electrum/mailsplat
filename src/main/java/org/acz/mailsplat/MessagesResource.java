@@ -18,8 +18,10 @@ package org.acz.mailsplat;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -43,11 +45,11 @@ public class MessagesResource
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listAll()
+    public Response listAll(@Context UriInfo uriInfo)
     {
         Builder<MessageRepresentation> builder = ImmutableList.builder();
         for (Message message : store.getAll()) {
-            builder.add(from(message, null));
+            builder.add(from(message, uriInfo.getRequestUri()));
         }
         return Response.ok(builder.build()).build();
     }

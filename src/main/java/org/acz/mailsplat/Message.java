@@ -22,19 +22,27 @@ import com.google.common.base.Preconditions;
 @Immutable
 public class Message
 {
+    private final String id;
     private final String sender;
     private final String recipient;
     private final String data;
 
-    public Message(String sender, String recipient, String data)
+    public Message(String id, String sender, String recipient, String data)
     {
+        Preconditions.checkNotNull(sender, "id is null");
         Preconditions.checkNotNull(sender, "sender is null");
         Preconditions.checkNotNull(recipient, "recipient is null");
         Preconditions.checkNotNull(data, "data is null");
 
+        this.id = id;
         this.sender = sender;
         this.recipient = recipient;
         this.data = data;
+    }
+
+    public String getId()
+    {
+        return id;
     }
 
     public String getSender()
@@ -61,6 +69,7 @@ public class Message
         Message message = (Message) o;
 
         if (!data.equals(message.data)) return false;
+        if (!id.equals(message.id)) return false;
         if (!recipient.equals(message.recipient)) return false;
         if (!sender.equals(message.sender)) return false;
 
@@ -70,7 +79,8 @@ public class Message
     @Override
     public int hashCode()
     {
-        int result = sender.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + sender.hashCode();
         result = 31 * result + recipient.hashCode();
         result = 31 * result + data.hashCode();
         return result;

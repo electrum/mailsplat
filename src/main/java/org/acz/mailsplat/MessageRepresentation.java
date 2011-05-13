@@ -35,18 +35,27 @@ public class MessageRepresentation
 
     @JsonCreator
     public MessageRepresentation(
+        @JsonProperty("id") String id,
         @JsonProperty("sender") String sender,
         @JsonProperty("recipient") String recipient,
         @JsonProperty("data") String data,
         @JsonProperty("self") URI self)
     {
-        this(new Message(sender, recipient, data), self);
+        this(new Message(id, sender, recipient, data), self);
     }
 
     private MessageRepresentation(Message message, URI self)
     {
         this.message = message;
         this.self = self;
+    }
+
+    @JsonProperty
+    @NotNull(message = "is missing")
+    @Pattern(regexp = "\\p{XDigit}{8}(-\\p{XDigit}{4}){3}\\p{XDigit}{12}")
+    public String getId()
+    {
+        return message.getId();
     }
 
     @JsonProperty

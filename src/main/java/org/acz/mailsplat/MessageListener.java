@@ -35,7 +35,7 @@ public class MessageListener implements SimpleMessageListener
         log.info("deliver: from=%s, recipient=%s, id=%s", from, recipient, id);
 
         String messageData = CharStreams.toString(new InputStreamReader(data, Charsets.ISO_8859_1));
-        Message message = new Message(from, recipient, messageData);
-        store.put(id, message);
+        Message message = new Message(id, from, recipient, messageData);
+        store.put(message);
     }
 }

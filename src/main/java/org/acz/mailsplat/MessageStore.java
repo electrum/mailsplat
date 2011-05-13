@@ -62,17 +62,16 @@ public class MessageStore
         return message;
     }
 
-    public void put(String id, Message message)
+    public void put(Message message)
     {
-        Preconditions.checkNotNull(id, "id must not be null");
         Preconditions.checkNotNull(message, "message must not be null");
 
-        if (messages.containsKey(id)) {
-            throw new IllegalArgumentException("message id already exists: " + id);
+        if (messages.containsKey(message.getId())) {
+            throw new IllegalArgumentException("message already exists: " + message.getId());
         }
 
-        messages.put(id, message);
-        stats.messageAdded(id, message);
+        messages.put(message.getId(), message);
+        stats.messageAdded(message.getId(), message);
     }
 
     /**
