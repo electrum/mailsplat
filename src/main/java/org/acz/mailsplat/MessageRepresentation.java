@@ -27,10 +27,11 @@ public class MessageRepresentation
 {
     private final Message message;
     private final URI self;
+    private final boolean full;
 
-    public static MessageRepresentation from(Message message, URI self)
+    public static MessageRepresentation from(Message message, URI self, boolean full)
     {
-        return new MessageRepresentation(message, self);
+        return new MessageRepresentation(message, self, full);
     }
 
     @JsonCreator
@@ -41,13 +42,14 @@ public class MessageRepresentation
         @JsonProperty("data") String data,
         @JsonProperty("self") URI self)
     {
-        this(new Message(id, sender, recipient, data), self);
+        this(new Message(id, sender, recipient, data), self, true);
     }
 
-    private MessageRepresentation(Message message, URI self)
+    private MessageRepresentation(Message message, URI self, boolean full)
     {
         this.message = message;
         this.self = self;
+        this.full = full;
     }
 
     @JsonProperty
@@ -72,6 +74,12 @@ public class MessageRepresentation
     public String getRecipient()
     {
         return message.getRecipient();
+    }
+
+    @JsonProperty
+    public String getData()
+    {
+        return full ? message.getData() : null;
     }
 
     @JsonProperty

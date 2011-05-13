@@ -47,7 +47,7 @@ public class MessagesResource
     {
         Builder<MessageRepresentation> builder = ImmutableList.builder();
         for (Message message : store.getAll()) {
-            builder.add(from(message, null));
+            builder.add(from(message, null, false));
         }
         return Response.ok(builder.build()).build();
     }
