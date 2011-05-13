@@ -55,7 +55,7 @@ public class MessageResource
             return Response.status(Response.Status.NOT_FOUND).entity("[" + id + "]").build();
         }
 
-        return Response.ok(from(message, uriInfo.getRequestUri())).build();
+        return Response.ok(from(message, uriInfo.getAbsolutePath())).build();
     }
 
     @DELETE
