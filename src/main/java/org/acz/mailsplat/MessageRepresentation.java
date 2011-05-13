@@ -15,11 +15,22 @@
  */
 package org.acz.mailsplat;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
+import javax.mail.Header;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.Maps;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -80,6 +91,30 @@ public class MessageRepresentation
     public String getData()
     {
         return full ? message.getData() : null;
+    }
+
+    @JsonProperty
+    public Map<String, List<String>> getHeaders()
+    {
+        if (!full) return null;
+        try {
+            Session session = Session.getDefaultInstance(new Properties());
+            ByteArrayInputStream stream = new ByteArrayInputStream(message.getData().getBytes(Charsets.ISO_8859_1));
+            MimeMessage message = new MimeMessage(session, stream);
+
+            Map<String, List<String>> headers = Maps.newTreeMap();
+            for (Enumeration e = message.getAllHeaders(); e.hasMoreElements(); ) {
+                Header header = (Header) e.nextElement();
+                if (!headers.containsKey(header.getName())) {
+                    headers.put(header.getName(), new ArrayList<String>());
+                }
+                headers.get(header.getName()).add(header.getValue());
+            }
+            return headers;
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     @JsonProperty
