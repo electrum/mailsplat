@@ -16,7 +16,6 @@
 package org.acz.mailsplat;
 
 import com.google.inject.Binder;
-import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
@@ -51,7 +50,6 @@ public class MainModule
     }
 
     @Provides
-    @Inject
     public MessageHandlerFactory provideMessageHandlerFactory(MessageListener listener)
     {
         return new SimpleMessageListenerAdapter(listener);
